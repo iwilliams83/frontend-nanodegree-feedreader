@@ -16,10 +16,7 @@ $(function() {
     describe('RSS Feeds', function() {
         /* This is our first test - it tests to make sure that the
          * allFeeds variable has been defined and that it is not
-         * empty. Experiment with this before you get started on
-         * the rest of this project. What happens when you change
-         * allFeeds in app.js to be an empty array and refresh the
-         * page?
+         * empty.
          */
         it('are defined', function() {
             expect(allFeeds).toBeDefined();
@@ -91,24 +88,49 @@ $(function() {
               expect($('body').hasClass('menu-hidden')).toBe(true);
             })
           })
-      }); //end of second test suite
+      });
 
     /* TODO: Write a new test suite named "Initial Entries" */
     describe('Initial Entries', function(){
         /* TODO: Write a test that ensures when the loadFeed
          * function is called and completes its work, there is at least
          * a single .entry element within the .feed container.
-         * Remember, loadFeed() is asynchronous so this test will require
-         * the use of Jasmine's beforeEach and asynchronous done() function.
-         */
+        */
+         beforeEach(function(done){
+           loadFeed(0, function(){
+             done();
+           })
+         })
+
+         it('should have at least one entry', function(done){
+           //$('.feed .entry') returns an array of 'entry' elements,
+           //check see if it has at least one element:
+           expect($('.feed .entry').length > 0).toBe(true);
+           done();
+         })
+
+  });
 
     /* TODO: Write a new test suite named "New Feed Selection" */
-
+    describe('New Feed Selection', function(){
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
-         * Remember, loadFeed() is asynchronous.
          */
+         beforeEach(function(done){
+           loadFeed(0, function(){
+             done();
+           })
+         })
 
-  }); //end third test suite
+         it('should be different from previous feed', function(done){
+           // save content of first feed into a variable
+           let firstFeed = $('.feed .entry')
+           //check first feed content against second feed content
+           loadFeed(1, function(){
+             expect($('.feed .entry') !== firstFeed).toBe(true);
+             done();
+           })
+         })
+   });
 
 }());
