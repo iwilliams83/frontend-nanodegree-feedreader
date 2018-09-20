@@ -116,21 +116,32 @@ $(function() {
         /* TODO: Write a test that ensures when a new feed is loaded
          * by the loadFeed function that the content actually changes.
          */
-         beforeEach(function(done){
-           loadFeed(0, function(){
-             done();
-           })
-         })
+
+         //create global variables to be used in 'it' block
+         let firstFeed;
+         let secondFeed;
+
+         beforeEach(function(done) {
+           //load first feed & store results in variable
+          loadFeed(0, function() {
+            firstFeed = $('.feed .entry')
+            //load second feed & store results in variable
+            loadFeed(1, function(){
+              secondFeed = $('.feed .entry')
+              done();
+            });
+
+          });
+
+        });
+
 
          it('should be different from previous feed', function(done){
-           // save content of first feed into a variable
-           let firstFeed = $('.feed .entry')
            //check first feed content against second feed content
-           loadFeed(1, function(){
-             expect($('.feed .entry') !== firstFeed).toBe(true);
+             expect(firstFeed !== secondFeed).toBe(true);
              done();
-           })
          })
-   });
+
+    })
 
 }());
